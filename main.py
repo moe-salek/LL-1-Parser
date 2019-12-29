@@ -1,5 +1,5 @@
 import lexer
-import parse
+import parser_
 from error import *
 
 import sys
@@ -15,7 +15,7 @@ def main():
             exit(1)
 
     tokens = lexer.lex(in_stream)
-    parse.parse(tokens)
+    parser_.parse(tokens)
 
 
 if __name__ == '__main__':
