@@ -8,7 +8,12 @@ class ErrorType(Enum):
 
 
 def print_error(e_type, line=None, cause=None, handle=None):
-    print('\033[91m' + "\n{} error occurred: {}{}{}".format(e_type.name,
-                                                            "" if line is None else "line({})".format(line),
-                                                            "" if cause is None else "\n\t{}.".format(cause),
-                                                            "" if handle is None else "\n\t{}.\n\t".format(handle)))
+    print(
+        "\033[91m"
+        + "\n{} error occurred: {}{}{}".format(
+            e_type.name,
+            "" if line is None else "line({})".format(line),
+            "" if cause is None else "\n\t{}.".format(cause),
+            "" if handle is None else "\n\t{}.\n\t".format(handle),
+        )
+    )

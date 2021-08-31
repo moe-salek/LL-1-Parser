@@ -18,5 +18,5 @@ def main():
     parser_.parse(tokens)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -5,59 +5,64 @@ import math
 
 # id: [tag, value, readonly]
 symbol_table = {
-    '=': [Tag.ASSIGN, '=', True],
-    '+': [Tag.PLUS, '+', True],
-    '-': [Tag.MINUS, '-', True],
-    '*': [Tag.MULTIPLY, '*', True],
-    '/': [Tag.DIVIDE, '/', True],
-    '^': [Tag.POWER, '^', True],
-    ';': [Tag.SEMICOLON, ';', True],
-    'div': [Tag.DIV, 'div', True],
-    'mod': [Tag.MOD, 'mod', True],
-    'sin': [Tag.F_SIN, 'sin', True],
-    'cos': [Tag.F_COS, 'cos', True],
-    'tan': [Tag.F_TAN, 'tan', True],
-    'cot': [Tag.F_COT, 'cot', True],
-    'sinh': [Tag.F_SINH, 'sinh', True],
-    'cosh': [Tag.F_COSH, 'cosh', True],
-    'log': [Tag.F_LOG, 'log', True],
-    'exp': [Tag.F_EXP, 'exp', True],
-    'sqr': [Tag.F_SQR, 'sqr', True],
-    'sqrt': [Tag.F_SQRT, 'sqrt', True],
-    'pi': [Tag.DOUBLE, math.pi, True]
+    "=": [Tag.ASSIGN, "=", True],
+    "+": [Tag.PLUS, "+", True],
+    "-": [Tag.MINUS, "-", True],
+    "*": [Tag.MULTIPLY, "*", True],
+    "/": [Tag.DIVIDE, "/", True],
+    "^": [Tag.POWER, "^", True],
+    ";": [Tag.SEMICOLON, ";", True],
+    "div": [Tag.DIV, "div", True],
+    "mod": [Tag.MOD, "mod", True],
+    "sin": [Tag.F_SIN, "sin", True],
+    "cos": [Tag.F_COS, "cos", True],
+    "tan": [Tag.F_TAN, "tan", True],
+    "cot": [Tag.F_COT, "cot", True],
+    "sinh": [Tag.F_SINH, "sinh", True],
+    "cosh": [Tag.F_COSH, "cosh", True],
+    "log": [Tag.F_LOG, "log", True],
+    "exp": [Tag.F_EXP, "exp", True],
+    "sqr": [Tag.F_SQR, "sqr", True],
+    "sqrt": [Tag.F_SQRT, "sqrt", True],
+    "pi": [Tag.DOUBLE, math.pi, True],
 }
 
 stream = None
 line = 1
 column = 0
-char = ' '
+char = " "
 
 
 def next_char():
     global stream, line, column, char
     char = stream.read(1).lower()
     column += 1
-    if char == '\n':
+    if char == "\n":
         column = 0
         line += 1
 
 
 def get_number():
-    num = ''
+    num = ""
     while char.isdigit():
         num += char
         next_char()
 
     # number is decimal?
-    if char == '.':
+    if char == ".":
         next_char()
         if char.isdigit():
-            num += '.'
+            num += "."
             while char.isdigit():
                 num += char
                 next_char()
         else:
-            print_error(ErrorType.LEXICAL, line, "Error while reading number", "No number after '.'")
+            print_error(
+                ErrorType.LEXICAL,
+                line,
+                "Error while reading number",
+                "No number after '.'",
+            )
             exit(1)
 
     try:
@@ -83,44 +88,49 @@ def get_token():
 
     # end of stream?
     if not len(char):
-        return Token('$', Tag.END_OF_STREAM, None, True)
+        return Token("$", Tag.END_OF_STREAM, None, True)
 
     # parentheses?
-    elif char == '(':
+    elif char == "(":
         next_char()
-        return Token('(', Tag.LEFT_PRT, '(', True)
-    elif char == ')':
+        return Token("(", Tag.LEFT_PRT, "(", True)
+    elif char == ")":
         next_char()
-        return Token(')', Tag.RIGHT_PRT, ')', True)
+        return Token(")", Tag.RIGHT_PRT, ")", True)
 
     # single-char operator / comments?
     elif char in symbol_table:
         # div or comment?
-        if char == '/':
+        if char == "/":
             next_char()
-            if char == '/':  # comment until the end of the line:
-                while char != '\n':
+            if char == "/":  # comment until the end of the line:
+                while char != "\n":
                     next_char()
                     if not len(char):
-                        return Token('$', Tag.END_OF_STREAM, None, True)
+                        return Token("$", Tag.END_OF_STREAM, None, True)
                 return None
-            elif char == '*':  # comment until */:
+            elif char == "*":  # comment until */:
                 get_next_chr = True
                 while True:
                     if get_next_chr:
                         next_char()
                     get_next_chr = True
                     if not len(char):
-                        print_error(ErrorType.LEXICAL, line, "Multiline comment was not closed", "*/ was expected")
+                        print_error(
+                            ErrorType.LEXICAL,
+                            line,
+                            "Multiline comment was not closed",
+                            "*/ was expected",
+                        )
                         exit(1)
-                    if char == '*':
+                    if char == "*":
                         next_char()
                         get_next_chr = False
-                        if char == '/':
+                        if char == "/":
                             next_char()
                             return None
             else:
-                return Token('/', Tag.DIVIDE, '/', True)
+                return Token("/", Tag.DIVIDE, "/", True)
 
         else:
             i = char
@@ -137,8 +147,8 @@ def get_token():
 
     # reserved and identifiers?
     else:
-        lexeme = ''
-        if char.isalnum() or char == '_':
+        lexeme = ""
+        if char.isalnum() or char == "_":
             lexeme = char
         else:
             print_error(ErrorType.LEXICAL, line, "Character not allowed in identifier")
@@ -147,23 +157,38 @@ def get_token():
             next_char()
             if not len(char):
                 if not lexeme:
-                    return Token('$', Tag.END_OF_STREAM, None, True)
+                    return Token("$", Tag.END_OF_STREAM, None, True)
                 else:
                     return Token(lexeme, Tag.IDENTIFIER, None, False)
             else:
-                if char.isalnum() or char == '_':
+                if char.isalnum() or char == "_":
                     lexeme += char
                     if is_reserved(lexeme):
                         next_char()
-                        if char.isspace() or char in symbol_table or char in ')(/*' or not len(char):
-                            return Token(lexeme, symbol_table[lexeme][0], symbol_table[lexeme][1],
-                                         symbol_table[lexeme][2])
+                        if (
+                            char.isspace()
+                            or char in symbol_table
+                            or char in ")(/*"
+                            or not len(char)
+                        ):
+                            return Token(
+                                lexeme,
+                                symbol_table[lexeme][0],
+                                symbol_table[lexeme][1],
+                                symbol_table[lexeme][2],
+                            )
                         else:
                             lexeme += char
-                elif char.isspace() or char in symbol_table or char in ')(/*':  # new identifier:
+                elif (
+                    char.isspace() or char in symbol_table or char in ")(/*"
+                ):  # new identifier:
                     if is_reserved(lexeme):
-                        return Token(lexeme, symbol_table[lexeme][0], symbol_table[lexeme][1],
-                                     symbol_table[lexeme][2])
+                        return Token(
+                            lexeme,
+                            symbol_table[lexeme][0],
+                            symbol_table[lexeme][1],
+                            symbol_table[lexeme][2],
+                        )
                     else:
                         return Token(lexeme, Tag.IDENTIFIER, None, False)
                 else:
@@ -190,6 +215,8 @@ def lex(input_stream):
                     right_prt_count += 1
                 tokens.append(token)
     if left_prt_count != right_prt_count:
-        print_error(ErrorType.LEXICAL, line, "Left and right parentheses numbers don't match")
+        print_error(
+            ErrorType.LEXICAL, line, "Left and right parentheses numbers don't match"
+        )
         exit(1)
     return tokens

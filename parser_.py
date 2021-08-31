@@ -3,8 +3,8 @@ from error import *
 from token_ import *
 from math import *
 
-TERM = 'TERM'
-RULE = 'NONT'
+TERM = "TERM"
+RULE = "NONT"
 
 # terminals are Tags:
 # SEMICOLON = 12
@@ -52,21 +52,411 @@ Num = 14
 
 PARSE_TABLE = [
     # 0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  24
-    [0,  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],  # 0
-    [1,  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],  # 1
-    [2,  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],  # 2
-    [3,  -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],  # 3
-    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  4,  5, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],  # 4
-    [6,   6,  6,  6, -1, -1, -1, -1, -1, -1, -1,  6, -1, -1, -1,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6],  # 5
-    [-1, -1, -1, -1,  9, -1, -1, -1, -1, -1,  7,  8, -1,  9,  9, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],  # 6
-    [10, 10, 10, 10, -1, -1, -1, -1, -1, -1, -1, 10, -1, -1, -1, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10],  # 7
-    [-1, -1, -1, -1, 15, -1, 11, 12, 13, 14, 15, 15, -1, -1, 15, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],  # 8
-    [16, 16, 16, 16, -1, -1, -1, -1, -1, -1, -1, 16, -1, -1, -1, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16],  # 9
-    [-1, -1, -1, -1, 18, 17, 18, 18, 18, 18, 18, 18, -1, -1, 18, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],  # 10
-    [29, 29, 29, 29, -1, -1, -1, -1, -1, -1, -1, 29, -1, -1, -1, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28],  # 11
-    [30, 30, 30, 32, -1, -1, -1, -1, -1, -1, -1, 31, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],  # 12
-    [34, 33, 33, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],  # 13
-    [-1, 35, 36, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],  # 14
+    [
+        0,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+    ],  # 0
+    [
+        1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+    ],  # 1
+    [
+        2,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+    ],  # 2
+    [
+        3,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+    ],  # 3
+    [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        4,
+        5,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+    ],  # 4
+    [
+        6,
+        6,
+        6,
+        6,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        6,
+        -1,
+        -1,
+        -1,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+    ],  # 5
+    [
+        -1,
+        -1,
+        -1,
+        -1,
+        9,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        7,
+        8,
+        -1,
+        9,
+        9,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+    ],  # 6
+    [
+        10,
+        10,
+        10,
+        10,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        10,
+        -1,
+        -1,
+        -1,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+        10,
+    ],  # 7
+    [
+        -1,
+        -1,
+        -1,
+        -1,
+        15,
+        -1,
+        11,
+        12,
+        13,
+        14,
+        15,
+        15,
+        -1,
+        -1,
+        15,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+    ],  # 8
+    [
+        16,
+        16,
+        16,
+        16,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        16,
+        -1,
+        -1,
+        -1,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+        16,
+    ],  # 9
+    [
+        -1,
+        -1,
+        -1,
+        -1,
+        18,
+        17,
+        18,
+        18,
+        18,
+        18,
+        18,
+        18,
+        -1,
+        -1,
+        18,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+    ],  # 10
+    [
+        29,
+        29,
+        29,
+        29,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        29,
+        -1,
+        -1,
+        -1,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+    ],  # 11
+    [
+        30,
+        30,
+        30,
+        32,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        31,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+    ],  # 12
+    [
+        34,
+        33,
+        33,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+    ],  # 13
+    [
+        -1,
+        35,
+        36,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+        -1,
+    ],  # 14
 ]
 
 RULES = [
@@ -89,16 +479,66 @@ RULES = [
     [(RULE, P4), (RULE, R3)],  # 16
     [(TERM, Tag.POWER.value), (RULE, P4), (RULE, R3)],  # 17
     [(TERM, Tag.END_OF_STREAM.value)],  # 18
-    [(TERM, Tag.F_SIN.value), (TERM, Tag.LEFT_PRT.value), (RULE, P4), (TERM, Tag.RIGHT_PRT.value)],  # 19
-    [(TERM, Tag.F_COS.value), (TERM, Tag.LEFT_PRT.value), (RULE, P4), (TERM, Tag.RIGHT_PRT.value)],  # 20
-    [(TERM, Tag.F_TAN.value), (TERM, Tag.LEFT_PRT.value), (RULE, P4), (TERM, Tag.RIGHT_PRT.value)],  # 21
-    [(TERM, Tag.F_COT.value), (TERM, Tag.LEFT_PRT.value), (RULE, P4), (TERM, Tag.RIGHT_PRT.value)],  # 22
-    [(TERM, Tag.F_SINH.value), (TERM, Tag.LEFT_PRT.value), (RULE, P4), (TERM, Tag.RIGHT_PRT.value)],  # 23
-    [(TERM, Tag.F_COSH.value), (TERM, Tag.LEFT_PRT.value), (RULE, P4), (TERM, Tag.RIGHT_PRT.value)],  # 24
-    [(TERM, Tag.F_LOG.value), (TERM, Tag.LEFT_PRT.value), (RULE, P4), (TERM, Tag.RIGHT_PRT.value)],  # 25
-    [(TERM, Tag.F_EXP.value), (TERM, Tag.LEFT_PRT.value), (RULE, P4), (TERM, Tag.RIGHT_PRT.value)],  # 26
-    [(TERM, Tag.F_SQR.value), (TERM, Tag.LEFT_PRT.value), (RULE, P4), (TERM, Tag.RIGHT_PRT.value)],  # 27
-    [(TERM, Tag.F_SQRT.value), (TERM, Tag.LEFT_PRT.value), (RULE, P4), (TERM, Tag.RIGHT_PRT.value)],  # 28
+    [
+        (TERM, Tag.F_SIN.value),
+        (TERM, Tag.LEFT_PRT.value),
+        (RULE, P4),
+        (TERM, Tag.RIGHT_PRT.value),
+    ],  # 19
+    [
+        (TERM, Tag.F_COS.value),
+        (TERM, Tag.LEFT_PRT.value),
+        (RULE, P4),
+        (TERM, Tag.RIGHT_PRT.value),
+    ],  # 20
+    [
+        (TERM, Tag.F_TAN.value),
+        (TERM, Tag.LEFT_PRT.value),
+        (RULE, P4),
+        (TERM, Tag.RIGHT_PRT.value),
+    ],  # 21
+    [
+        (TERM, Tag.F_COT.value),
+        (TERM, Tag.LEFT_PRT.value),
+        (RULE, P4),
+        (TERM, Tag.RIGHT_PRT.value),
+    ],  # 22
+    [
+        (TERM, Tag.F_SINH.value),
+        (TERM, Tag.LEFT_PRT.value),
+        (RULE, P4),
+        (TERM, Tag.RIGHT_PRT.value),
+    ],  # 23
+    [
+        (TERM, Tag.F_COSH.value),
+        (TERM, Tag.LEFT_PRT.value),
+        (RULE, P4),
+        (TERM, Tag.RIGHT_PRT.value),
+    ],  # 24
+    [
+        (TERM, Tag.F_LOG.value),
+        (TERM, Tag.LEFT_PRT.value),
+        (RULE, P4),
+        (TERM, Tag.RIGHT_PRT.value),
+    ],  # 25
+    [
+        (TERM, Tag.F_EXP.value),
+        (TERM, Tag.LEFT_PRT.value),
+        (RULE, P4),
+        (TERM, Tag.RIGHT_PRT.value),
+    ],  # 26
+    [
+        (TERM, Tag.F_SQR.value),
+        (TERM, Tag.LEFT_PRT.value),
+        (RULE, P4),
+        (TERM, Tag.RIGHT_PRT.value),
+    ],  # 27
+    [
+        (TERM, Tag.F_SQRT.value),
+        (TERM, Tag.LEFT_PRT.value),
+        (RULE, P4),
+        (TERM, Tag.RIGHT_PRT.value),
+    ],  # 28
     [(RULE, P5)],  # 29
     [(RULE, F)],  # 30
     [(TERM, Tag.MINUS.value)],  # 31
@@ -109,9 +549,7 @@ RULES = [
     [(TERM, Tag.DOUBLE.value)],  # 36
 ]
 
-STACK = [
-    (TERM, Tag.END_OF_STREAM.value), (RULE, S)
-]
+STACK = [(TERM, Tag.END_OF_STREAM.value), (RULE, S)]
 
 precedence = {
     Tag.END_OF_STREAM: -1,
@@ -134,7 +572,7 @@ precedence = {
     Tag.PLUS: 2,
     Tag.MINUS: 2,
     Tag.LEFT_PRT: 1,
-    Tag.RIGHT_PRT: 1
+    Tag.RIGHT_PRT: 1,
 }
 
 
@@ -152,7 +590,9 @@ def postfix(tokens):
                 result.append(top)
                 top = stack.pop()
         else:
-            while (len(stack) > 0) and (precedence[stack[-1].tag] >= precedence[token.tag]):
+            while (len(stack) > 0) and (
+                precedence[stack[-1].tag] >= precedence[token.tag]
+            ):
                 result.append(stack.pop())
             stack.append(token)
 
@@ -164,7 +604,9 @@ def postfix(tokens):
 
 def ll1_parser(tokens):
     if len(tokens) <= 3:
-        print_error(ErrorType.SEMANTIC, cause="Input rejected", handle="Not enough tokens")
+        print_error(
+            ErrorType.SEMANTIC, cause="Input rejected", handle="Not enough tokens"
+        )
         exit(1)
     index = 0
     while len(STACK):
@@ -172,24 +614,28 @@ def ll1_parser(tokens):
         token = tokens[index]
         if ttype == TERM:
             if tvalue == Tag.END_OF_STREAM.value:
-                print('pop:', Tag.END_OF_STREAM)
+                print("pop:", Tag.END_OF_STREAM)
                 pass
             elif tvalue == token.tag.value:
                 index += 1
-                print('pop:', token.tag)
+                print("pop:", token.tag)
             else:
-                print_error(ErrorType.SEMANTIC, cause="Input rejected", handle="Error while creating AST")
+                print_error(
+                    ErrorType.SEMANTIC,
+                    cause="Input rejected",
+                    handle="Error while creating AST",
+                )
                 exit(1)
         elif ttype == RULE:
-            print('tvalue:', tvalue, 'token:', token.tag.value, token.tag)
+            print("tvalue:", tvalue, "token:", token.tag.value, token.tag)
             rule = PARSE_TABLE[tvalue][token.tag.value]
-            print('rule:', rule)
+            print("rule:", rule)
             for r in reversed(RULES[rule]):
                 STACK.append(r)
         else:
             print_error(ErrorType.SEMANTIC, cause="Invalid TERM / NONT")
             exit(1)
-        print('STACK:', STACK)
+        print("STACK:", STACK)
     return True
 
 
@@ -207,8 +653,8 @@ def evaluate(pf):
             if flag:
                 print("\nEnter value(s) for identifiers:")
                 flag = False
-            print('id: {} tag: {}'.format(token.id, token.tag))
-            token.value = input('> ')
+            print("id: {} tag: {}".format(token.id, token.tag))
+            token.value = input("> ")
             try:
                 token.value = float(token.value)
             except:
@@ -368,7 +814,7 @@ def evaluate(pf):
             stack.pop()
             break
 
-    print('\nIdentifiers:')
+    print("\nIdentifiers:")
     for i in table:
         token = table[i]
         if token.tag == Tag.IDENTIFIER:
@@ -379,13 +825,17 @@ def parse(tokens):
     print()
     print("Infix:")
     for i in tokens:
-        print(i.id, end=' ')
+        print(i.id, end=" ")
     print()
 
     print()
     print("Tokens:")
     for i, token in enumerate(tokens):
-        print("{}:\t{}, {}, {}, {}".format(i, token.id, token.tag.name, token.value, token.readonly))
+        print(
+            "{}:\t{}, {}, {}, {}".format(
+                i, token.id, token.tag.name, token.value, token.readonly
+            )
+        )
     print()
     _tokens = []
     for token in tokens:
@@ -396,11 +846,11 @@ def parse(tokens):
             _tokens.append(token)
     tokens = _tokens
     if ll1_parser(tokens):
-        print('\n\033[92m' + 'Input Accepted!' + "\x1b[39m")
+        print("\n\033[92m" + "Input Accepted!" + "\x1b[39m")
     print()
     pf = postfix(tokens)
     print("Postfix:")
     for i, token in enumerate(pf):
-        print(token.id, end=' ')
+        print(token.id, end=" ")
     print()
     evaluate(pf)
